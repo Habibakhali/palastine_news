@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:palastine_news/Model/NewsDataModel.dart';
+import 'package:palastine_news/Shared/Network/Remote/api_manager.dart';
+import 'package:palastine_news/Style/myTheme.dart';
+import 'package:palastine_news/tab_item.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
 static const String routreName='homeScreen';
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+int selectedIndex=0;
+
+List<String> sourses=['Top News','Gaza','Al-Aqsa'];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,6 +32,47 @@ static const String routreName='homeScreen';
         ),
       ),
       backgroundColor: Colors.transparent,
+      body: Column(
+        children: [
+          DefaultTabController(
+            length: 3,
+            child: TabBar(
+              isScrollable: true,
+              indicatorColor: Colors.transparent,
+              onTap: (index){
+                selectedIndex=index;
+                setState(() {
+
+                });
+              },
+              tabs: sourses.map((e) =>
+                  TabItem(e, sourses.indexOf(e)==selectedIndex))
+                  .toList()
+            ),
+          ),
+          FutureBuilder<NewsDataModel>(
+              future: ApiManger.getNews(sourses[selectedIndex]),
+              builder:(context,snapshot){
+                if(snapshot.connectionState==ConnectionState.waiting)
+                  return Expanded(child: Center(child: CircularProgressIndicator(color: MyTheme.greenColor,)));
+                if(snapshot.hasError)
+                  return Text('error');
+                if(snapshot.data!.status !='ok')
+                  return Text('error');
+                var data=snapshot.data!.articles??[];
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context,index){
+                     return Text(data[index].title??"Error",style: TextStyle(color: Colors.black),);
+                    },
+                  ),
+                );
+              }
+
+          )
+        ],
+      ),
     ),
     );
   }
