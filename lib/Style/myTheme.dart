@@ -6,6 +6,16 @@ class MyTheme{
       primaryColor: greenColor,
       appBarTheme: AppBarTheme(
           backgroundColor: greenColor
-      )
+      ),
+    textTheme: TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold
+      ),
+      titleSmall: TextStyle(
+          fontSize: 12,
+          color: Colors.grey
+      ),
+    )
   );
 }
