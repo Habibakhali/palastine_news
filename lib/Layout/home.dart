@@ -5,6 +5,8 @@ import 'package:palastine_news/Shared/Network/Remote/api_manager.dart';
 import 'package:palastine_news/Style/myTheme.dart';
 import 'package:palastine_news/Screen/tab_item.dart';
 
+import '../Screen/bottom_sheet_content.dart';
+
 class HomeScreen extends StatefulWidget {
   static const String routreName = 'homeScreen';
 
@@ -67,12 +69,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (context, index) {
-                        return NewsItem(
-                            data[index].urlToImage,
-                            data[index].title,
-                            data[index].description,
-                            data[index].source!.name,
-                            data[index].publishedAt!.substring(0, 10));
+                        return InkWell(
+                          onTap: () {
+                            btmSheet(data[index].title!,
+                                data[index].publishedAt!.substring(0,10),
+                                data[index].urlToImage!,
+                                data[index].source!.name!,
+                                data[index].content!);
+                          },
+                          child: NewsItem(
+                              data[index].urlToImage,
+                              data[index].title,
+                              data[index].description,
+                              data[index].source!.name,
+                              data[index].publishedAt!.substring(0, 10)),
+                        );
                       },
                     ),
                   );
@@ -81,5 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+ void btmSheet(String title,
+  String time,
+  String image,
+  String name,
+  String content){
+showModalBottomSheet(context: context, builder: (context){
+  return BottomSheetContent(title,time,image,name,content);
+});
   }
 }
