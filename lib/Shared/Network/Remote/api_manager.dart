@@ -8,7 +8,7 @@ class ApiManger{
   static Future<NewsDataModel> getNews(String sourses)async{
     Uri url=Uri.https(BASE,'/v2/everything',{
       'apiKey':APIKEY,
-      'q': sourses=='Top News'?'palastine':sourses,
+      'q': sourses=='Top News'?'palestinians':sourses=='Al-Aqsa Mosque'?"al-Aqsa AND mosque.":sourses,
       'language':'en'
     });
     http.Response response=await http.get(url);
